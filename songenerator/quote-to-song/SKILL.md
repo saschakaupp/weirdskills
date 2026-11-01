@@ -1,6 +1,6 @@
 ---
 name: quote-to-song
-description: Transform collections of quotations, anecdotes, running jokes, and group-specific language into original, coherent, singable songs. Analyze themes and social dynamics, select varied source material, develop a musical concept, write lyrics, and optionally produce generator-ready style prompts, translations, and alternate edits.
+description: Generate complete Suno-ready songs from arbitrary thematic collections and short prompts, including optional Lyrix versions with sung originals and spoken German translations.
 ---
 
 # Quote-to-Song
@@ -20,7 +20,7 @@ Accept any combination of:
 - Examples of previously successful or unsuccessful songs.
 - Output constraints such as a maximum character count.
 
-Start with the material available. Ask only when a missing detail would materially block the task; otherwise choose creative defaults and state important assumptions briefly.
+Start with the material available. Ask only when a missing detail would materially block the task; otherwise choose creative defaults. When invoked from a project with AGENTS.md, follow its source selection, output path, naming, and validation rules. A short prompt is an instruction to generate a finished song, not to propose concepts.
 
 ## Workflow
 
@@ -94,7 +94,7 @@ Favor vivid concrete images, internal rhythm, natural phrasing, and hooks that a
 
 ### 6. Prepare generator-ready output
 
-When the user intends to use a music generator, provide two separate copyable outputs:
+For Suno requests, produce two clearly separated Markdown sections in the single output artifact:
 
 **Lyrics**
 - Include clear section markers such as `[Verse]`, `[Chorus]`, `[Bridge]`.
@@ -108,7 +108,7 @@ When the user intends to use a music generator, provide two separate copyable ou
 - Describe the sound concretely rather than relying on an artist's name.
 - Avoid contradicting the lyric structure (e.g., "no speech" while the lyrics request a narrator).
 
-Respect hard character limits by counting the actual lyrics including section markers. When close to a limit, shorten repeated choruses, commentary, and production cues before removing the story's essential beats. Do not claim a text is under a limit without checking it.
+For Suno, lyrics including section markers and all whitespace must be at most 5,000 Unicode characters; style prompt at most 1,000. Aim for <=4,700 and <=900 respectively. Count with a script before delivery. For Lyrix mode, count original and Lyrix lyrics independently. If over limit, rewrite musically rather than truncating mechanically.
 
 ### 7. Multilingual songs and translations
 
@@ -116,43 +116,40 @@ Write idiomatic lyrics in the requested language. Prioritize natural syntax, sin
 
 For a requested **translation**, preserve the original song's meaning, structure, and tone; do not silently rewrite the story. Label a freer singable adaptation as an adaptation.
 
-For alternating foreign-language singing and native-language commentary, use short alternating segments with explicit tags for singing, instrumental backing, and narration. Spoken commentary should summarize accurately and be shorter than the sung source. Check the combined character budget.
+### Lyrix version — spoken radio translations
 
-When a music generator mispronounces a recurring term, substitute a pronounceable synonym only if meaning and user constraints allow it.
+When the user requests `lyrix-Version`, create a second complete lyrics arrangement using the proven radio-translation format.
 
-### 8. Review and improve
+**Canonical structure:**
 
-Before delivery, verify:
-- The song has a clear thesis, progression, and memorable hook.
-- The quotations are diverse, contextualized, and not merely stacked.
-- Adapted lines do not masquerade as verbatim quotations.
-- The rhyme, stress, and phrasing are singable in the chosen language.
-- The emotional register fits the brief; humor does not erase human warmth.
-- The musical prompt matches the lyric arrangement.
-- No unrequested spoken passages or intrusive stage directions appear.
-- Names, private facts, and sensitive anecdotes are handled respectfully.
-- Any stated hard length limit has been checked.
+```text
+[Verse – French male singing]
+Original-language lyrics, normally four lines.
 
-If the user reports generator results, treat that feedback as an empirical constraint. Revise the specific failure mode (pronunciation, spoken-vocal behavior, song length, pacing, genre realization) without discarding what worked.
+[Instrumental – German male radio voice, calm spoken translation]
+A concise, natural German translation of the preceding passage.
 
-## Output conventions
+[Verse – French male singing]
+Next original-language passage.
 
-For a straightforward song request, output:
-1. **Title and brief concept** (one or two sentences).
-2. **Complete lyrics** with generator-friendly section tags.
-3. **English style prompt** ready to copy.
-4. **Optional short note** on an unusual creative choice, only if useful.
+[Instrumental – German male radio voice, dry delivery]
+A concise German translation of that passage.
+```
 
-For an initial large quotation collection without a specific song request, provide a concise thematic analysis and two to four genuinely distinct song concepts; then invite selection. If the user asks to proceed immediately, choose the strongest concept and write the song.
+**Rules:**
 
-For a request to analyze quotations only, stop after analysis; do not force a song.
+- Keep the original-language lyrics sung.
+- Insert a separate German spoken translation immediately after each meaningful musical passage, normally a verse, chorus segment, pre-chorus or bridge.
+- Use a **single bracketed instruction** beginning with `[Instrumental – German ... radio voice, ...]` for each translation.
+- The German text is spoken, never sung.
+- Translate the meaning of the immediately preceding passage, concisely and idiomatically. Preserve the humor, punchline and important details.
+- The translation may summarize four sung lines in one or two natural German sentences.
+- Keep the original song structure, but split longer verses or choruses into shorter, self-contained musical passages where useful.
+- Prefer a calm, dry, understated radio delivery. Adjust the emotional tone where appropriate.
+- Do not introduce separate `[German narrator]`, `[Instrumental break]`, `[Full groove returns]` or `[spoken response]` tags by default.
+- Do not turn the translation into a dialogue, rhythmic spoken vocal or additional sung part.
+- Use the same pattern regardless of whether the original language is French, English, Japanese or another non-German language.
+- For German originals, do not add redundant German translations unless explicitly requested.
+- Respect the 5,000-character lyrics limit for each complete version, including all tags and translations.
 
-## Creative principles
-
-- **Meaning before quotation count.** More source quotes do not automatically make a better song.
-- **Specificity before generic praise.** Small authentic details make a shared world believable.
-- **Contrast creates humor.** Let lofty language collide with ordinary events.
-- **Sincerity should be earned.** A heartfelt bridge works best when earlier scenes establish real connection.
-- **Musicality matters.** Lyrics are intended to be performed, not merely read.
-- **Experiment, observe, iterate.** Music generators are probabilistic; adapt to actual results.
-- **Originality and respect.** Create new melodies and lyrics, avoid reproducing copyrighted songs, and don't make people the targets of gratuitous ridicule.
+**The objective:** A song in its original language, periodically interrupted by a distinct German radio-style voice that translates the preceding sung passage. The translations should sound like brief radio commentary between musical sections, not like an additional character performing in the song.
